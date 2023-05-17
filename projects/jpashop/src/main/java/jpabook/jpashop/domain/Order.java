@@ -39,6 +39,7 @@ public class Order {
     // 연관관계 메서드는 양방향 연관관계일 때 사용한다.
     // 연관관계 메서드는 핵심적인 비즈니스 로직을 구현할 때 사용한다.
     // 연관관계 메서드는 엔티티를 변경할 때 연관된 필드를 같이 변경해주는 편리함을 제공한다.
+
     public void setMember(Member member) { // 주문한 회원 정보를 설정한다.
         this.member = member;
         member.getOrders().add(this);
@@ -53,6 +54,7 @@ public class Order {
         this.delivery = delivery;
         delivery.setOrder(this);
     }
+
 
 
 }
