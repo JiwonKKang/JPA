@@ -18,7 +18,7 @@ public class ItemController {
 
     @GetMapping("/items/new")
     public String createForm(@ModelAttribute("form") BookForm form) {//@ModelAttribute 에서 이름을 생략하면 자동으로 클래스명의 첫글자를 소문자로 바꿔서 넣어준다
-        return "items/createItemForm";
+        return "items/createItemForm";//
     }
 
     @PostMapping("/items/new")
