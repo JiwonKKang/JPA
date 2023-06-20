@@ -1,6 +1,6 @@
 package jpabasic.jpa_basic;
 
-import org.springframework.boot.SpringApplication;
+import domain.Order;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import javax.persistence.EntityManager;
