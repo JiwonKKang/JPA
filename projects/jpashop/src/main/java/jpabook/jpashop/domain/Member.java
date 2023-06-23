@@ -22,7 +22,7 @@ public class Member {
     @Embedded
     private Address address;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)//읽기 전용, 연관관계의 주인은 order 테이블의 member 필드
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)//읽기 전용, 연관관계의 주인은 order 테이블의 member 필드.
     private List<Order> orders = new ArrayList<>();
 
 }
