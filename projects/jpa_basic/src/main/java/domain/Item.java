@@ -10,15 +10,16 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class Item {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@AllArgsConstructor
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public abstract class Item {
+
+    @Id @GeneratedValue
     @Column(name = "item_id")
     private Long id;
 
     private String name;
 
-    private int stockQuantity;
+    private int price;
 }
