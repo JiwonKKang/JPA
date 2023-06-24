@@ -33,6 +33,11 @@ dependencies {
 
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
+	implementation 'javax.persistence:javax.persistence-api:2.2'
+
+	// Hibernate Core implementation
+	implementation 'org.hibernate:hibernate-core:5.5.7.Final'
+
 	//Querydsl 추가
 	implementation 'com.querydsl:querydsl-jpa'
 	annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jpa"
