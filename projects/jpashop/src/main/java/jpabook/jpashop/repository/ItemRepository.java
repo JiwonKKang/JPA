@@ -1,4 +1,4 @@
-package jpabook.jpashop.domain.repository;
+package jpabook.jpashop.repository;
 
 import jpabook.jpashop.domain.item.Item;
 import lombok.RequiredArgsConstructor;
@@ -13,13 +13,12 @@ public class ItemRepository {
 
     private final EntityManager em;
 
-    public Long save(Item item) {
+    public void save(Item item) {
         if (item.getId() == null) {
             em.persist(item);
         } else {
-            em.merge(item);// 이미 데이터에 있던 값이라면 강제로 업데이트를한다
+            em.merge(item);
         }
-        return item.getId();
     }
 
     public Item findOne(Long id) {
@@ -30,6 +29,4 @@ public class ItemRepository {
         return em.createQuery("select i from Item i", Item.class)
                 .getResultList();
     }
-
-
 }

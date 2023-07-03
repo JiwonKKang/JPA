@@ -1,33 +1,31 @@
-package jpabook.jpashop.domain.service;
+package jpabook.jpashop.service;
 
 import jpabook.jpashop.domain.*;
 import jpabook.jpashop.domain.item.Item;
-import jpabook.jpashop.domain.repository.*;
+import jpabook.jpashop.repository.ItemRepository;
+import jpabook.jpashop.repository.MemberRepository;
+import jpabook.jpashop.repository.OrderRepository;
+import jpabook.jpashop.repository.OrderSearch;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class OrderService {
 
     private final OrderRepository orderRepository;
     private final MemberRepository memberRepository;
     private final ItemRepository itemRepository;
-    private final OrderQueryRepository orderQueryRepository;
 
-    //주문
+    /**
+     * 주문
+     */
     @Transactional
     public Long order(Long memberId, Long itemId, int count) {
-
-        /*서비스 계층에 비즈니스로직이 없고 엔티티에서
-         대부분의 비즈니스 로직을 다루는것을
-         도메인 모델 패턴이라고 한다.
-         */
 
         //엔티티 조회
         Member member = memberRepository.findOne(memberId);
@@ -36,8 +34,9 @@ public class OrderService {
         //배송정보 생성
         Delivery delivery = new Delivery();
         delivery.setAddress(member.getAddress());
+        delivery.setStatus(DeliveryStatus.READY);
 
-        //주문 상품 생성
+        //주문상품 생성
         OrderItem orderItem = OrderItem.createOrderItem(item, item.getPrice(), count);
 
         //주문 생성
@@ -45,24 +44,23 @@ public class OrderService {
 
         //주문 저장
         orderRepository.save(order);
+
         return order.getId();
     }
 
-
-    //취소
+    /**
+     * 주문 취소
+     */
     @Transactional
     public void cancelOrder(Long orderId) {
-
         //주문 엔티티 조회
         Order order = orderRepository.findOne(orderId);
-
         //주문 취소
         order.cancel();
     }
 
     //검색
-    @Transactional
-    public List<Order> findOrders(OrderSearch cond) {
-        return orderQueryRepository.findOrders(cond);
+    public List<Order> findOrders(OrderSearch orderSearch) {
+        return orderRepository.findAllByString(orderSearch);
     }
 }

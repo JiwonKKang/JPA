@@ -6,7 +6,6 @@ import javax.persistence.Embeddable;
 
 @Embeddable
 @Getter
-//실무에서는 @Setter가 모두 열려있으면, 변경  포인트가 너무 많아서 유지보수가 어렵다.
 public class Address {
 
     private String city;
@@ -21,5 +20,4 @@ public class Address {
         this.street = street;
         this.zipcode = zipcode;
     }
-
 }
