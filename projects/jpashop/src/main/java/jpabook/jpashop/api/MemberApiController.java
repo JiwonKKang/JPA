@@ -10,6 +10,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,6 +40,34 @@ public class MemberApiController {
         Member findMember = memberService.findOne(id);
         return new UpdateMemberResponse(findMember.getId(), findMember.getName());
     }
+
+    @GetMapping("api/v2/members")
+    public Result<List<MemberDTO>> membersV2() {
+        List<Member> findMembers = memberService.findMembers();
+        List<MemberDTO> memberDTOList = findMembers.stream().map(MemberDTO::from)
+                .collect(Collectors.toList());
+        return new Result<>(memberDTOList.size(), memberDTOList);
+    }
+
+    @Data
+    @AllArgsConstructor
+
+    static class MemberDTO {
+        private String name;
+
+        static MemberDTO from(Member member) {
+            return new MemberDTO(member.getName());
+        }
+    }
+
+
+    @Data
+    @AllArgsConstructor
+    static class Result<T> {
+        private int count;
+        private T data;
+    }
+
 
     @Data
     static class UpdateMemberRequest {
