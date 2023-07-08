@@ -1,26 +1,19 @@
 package jpabook.jpashop.api;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jpabook.jpashop.domain.Address;
 import jpabook.jpashop.domain.Order;
 import jpabook.jpashop.domain.OrderItem;
 import jpabook.jpashop.domain.OrderStatus;
-import jpabook.jpashop.domain.item.Item;
 import jpabook.jpashop.repository.OrderRepository;
 import jpabook.jpashop.repository.OrderSearch;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static javax.persistence.FetchType.LAZY;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,7 +28,23 @@ public class OrderApiController {
         return new Result<>(dtos.size(), dtos);
     }
 
-    @Getter
+    @GetMapping("/api/v3/orders")
+    public Result<List<OrderDto>> OrderV3() {
+        List<OrderDto> dtos = orderRepository.findAllWithItem().stream()
+                .map(OrderDto::from)
+                .collect(Collectors.toList());
+        return new Result<>(dtos.size(), dtos);
+    }
+
+    @GetMapping("/api/v3.1/orders")
+    public Result<List<OrderDto>> OrderV3_page() {
+        List<OrderDto> dtos = orderRepository.findAllWithMemberDelivery().stream()
+                .map(OrderDto::from)
+                .collect(Collectors.toList());
+        return new Result<>(dtos.size(), dtos);
+    }
+
+    @Data
     static class OrderDto {
         private Long orderId;
         private String name;
@@ -69,36 +78,25 @@ public class OrderApiController {
 
     @Data
     static class OrderItemDto {
-        private Long id;
-        private Long itemId;
-        private Long orderId;
+
+        private String itemName;
         private int orderPrice;
         private int count;
 
-        public OrderItemDto(Long id, Long orderId, Long itemId, int orderPrice, int count) {
-            this.id = id;
-            this.itemId = itemId;
-            this.orderId = orderId;
+        public OrderItemDto(String itemName, int orderPrice, int count) {
+            this.itemName = itemName;
             this.orderPrice = orderPrice;
             this.count = count;
         }
 
         public static OrderItemDto from(OrderItem orderItem) {
             return new OrderItemDto(
-                    orderItem.getId(),
-                    orderItem.getItem().getId(),
-                    orderItem.getOrder().getId(),
+                    orderItem.getItem().getName(),
                     orderItem.getOrderPrice(),
                     orderItem.getCount()
             );
         }
     }
-
-    @Data
-    static class ItemDto {
-
-    }
-
 
     @Data
     @AllArgsConstructor
