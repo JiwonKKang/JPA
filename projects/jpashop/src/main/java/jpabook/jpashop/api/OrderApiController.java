@@ -5,6 +5,8 @@ import jpabook.jpashop.domain.OrderItem;
 import jpabook.jpashop.domain.OrderStatus;
 import jpabook.jpashop.repository.OrderRepository;
 import jpabook.jpashop.repository.OrderSearch;
+import jpabook.jpashop.repository.order.query.OrderQueryDto;
+import jpabook.jpashop.repository.order.query.OrderQueryRepository;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +21,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class OrderApiController {
     private final OrderRepository orderRepository;
+    private final OrderQueryRepository orderQueryRepository;
 
     @GetMapping("/api/v2/orders")
-    public Result<List<OrderDto>> OrderV2() {
+    public Result<List<OrderDto>> orderV2() {
         List<OrderDto> dtos = orderRepository.findAllByString(new OrderSearch()).stream()
                 .map(OrderDto::from)
                 .collect(Collectors.toList());
@@ -29,7 +32,7 @@ public class OrderApiController {
     }
 
     @GetMapping("/api/v3/orders")
-    public Result<List<OrderDto>> OrderV3() {
+    public Result<List<OrderDto>> orderV3() {
         List<OrderDto> dtos = orderRepository.findAllWithItem().stream()
                 .map(OrderDto::from)
                 .collect(Collectors.toList());
@@ -37,12 +40,13 @@ public class OrderApiController {
     }
 
     @GetMapping("/api/v3.1/orders")
-    public Result<List<OrderDto>> OrderV3_page() {
+    public Result<List<OrderDto>> orderV3_page() {
         List<OrderDto> dtos = orderRepository.findAllWithMemberDelivery().stream()
                 .map(OrderDto::from)
                 .collect(Collectors.toList());
         return new Result<>(dtos.size(), dtos);
     }
+    
 
     @Data
     static class OrderDto {
