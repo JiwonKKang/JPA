@@ -3,10 +3,7 @@ package study.datajpa.repository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import study.datajpa.dto.MemberDto;
@@ -73,10 +70,10 @@ class MemberRepositoryTest {
         teamJpaRepository.save(teamAQ);
         //Then
 
-        List<MemberDto> memberDto = memberRepository.findMemberDto();
-        for (MemberDto dto : memberDto) {
-            System.out.println("UserName = " + dto.getUserName());
-        }
+//        List<MemberDto> memberDto = memberRepository.findMemberDto();
+//        for (MemberDto dto : memberDto) {
+//            System.out.println("UserName = " + dto.getUserName());
+//        }
 
     }
 
@@ -135,10 +132,19 @@ class MemberRepositoryTest {
     public void given2_when_then() throws Exception {
 
         //Given
-        memberRepository.findMemberCustom();
+        Team teamA = new Team("teamA");
+        Member m1 = new Member("m1", 0, teamA);
+        Member m2 = new Member("m2", 0, teamA);
+        em.persist(teamA);
+        em.flush();
+        em.clear();
         //When
 
         //Then
+        Member member = new Member("m1");
+        Example<Member> ex = Example.of(member);
+
+        memberRepository.findAll(ex);
 
     }
 
