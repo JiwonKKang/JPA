@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import study.datajpa.dto.MemberDto;
 import study.datajpa.entity.Member;
+import study.datajpa.entity.UserNameOnlyDto;
 
 import java.util.List;
 
@@ -32,4 +33,6 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberRep
     @Override
     @EntityGraph(attributePaths = {"team"})
     List<Member> findAll();
+
+    List<UserNameOnlyDto> findByUsername(@Param("username") String username);
 }

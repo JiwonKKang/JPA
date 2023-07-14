@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import study.datajpa.dto.MemberDto;
 import study.datajpa.entity.Member;
 import study.datajpa.entity.Team;
+import study.datajpa.entity.UserNameOnlyDto;
 
 import javax.persistence.EntityManager;
 import java.time.temporal.TemporalAccessor;
@@ -141,10 +142,11 @@ class MemberRepositoryTest {
         //When
 
         //Then
-        Member member = new Member("m1");
-        Example<Member> ex = Example.of(member);
+        List<UserNameOnlyDto> res = memberRepository.findByUsername("m1");
 
-        memberRepository.findAll(ex);
+        for (UserNameOnlyDto re : res) {
+            System.out.println("re.getUsername() = " + re.getUsername());
+        }
 
     }
 
