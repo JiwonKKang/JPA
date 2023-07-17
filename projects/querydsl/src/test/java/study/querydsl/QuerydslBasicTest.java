@@ -37,7 +37,6 @@ public class QuerydslBasicTest {
     public void given_when_then() throws Exception {
 
         //Given
-
         //When
 
         //Then
